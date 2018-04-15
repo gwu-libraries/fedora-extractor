@@ -1,3 +1,4 @@
+import config
 import json
 import os
 import requests
@@ -6,7 +7,7 @@ import solr
 
 
 def extract_fedora_objects(ids, fedora_url, fedora_user, fedora_pwd):
-    for id in ids[0:20]:
+    for id in ids:
         print("%s --> %s" % (id, id_to_path(id)))
         rurl = fedora_url + "/" + id_to_path(id)
         r = requests.get(rurl, auth=(fedora_user, fedora_pwd),
@@ -27,8 +28,9 @@ def extract_fedora_objects(ids, fedora_url, fedora_user, fedora_pwd):
         print('Filename = %s' % filename)
         fileurl = rurl + "/content"
         r = requests.get(fileurl, auth=(fedora_user, fedora_pwd), stream=True)
-        with open(filepath + "/" + filename, 'wb') as out_file:
-            shutil.copyfileobj(r.raw, out_file)
+        if not config.debug_mode:
+            with open(filepath + "/" + filename, 'wb') as out_file:
+                shutil.copyfileobj(r.raw, out_file)
         del r
 
 def ids_from_solr(solr_url):
