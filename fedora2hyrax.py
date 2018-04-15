@@ -12,7 +12,7 @@ def fedora2hyrax():
         j2['resource_type'] = j['http://purl.org/dc/terms/type'][0]['@value']
         j2['creator'] = j['http://purl.org/dc/terms/creator'][0]['@value']
         if 'http://purl.org/dc/terms/relation' in j:
-            j2['keyword'] = j['http://purl.org/dc/terms/relation'][0]['@value']
+            j2['keyword'] = [k['@value'] for k in j['http://purl.org/dc/terms/relation']]
         j2['description'] = j['http://purl.org/dc/terms/description'][0]['@value']
         j2['date_created'] = j['http://purl.org/dc/terms/created'][0]['@value']
         if 'http://scholarspace.library.gwu.edu/ns#gwaffiliation' in j:
