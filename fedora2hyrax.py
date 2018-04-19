@@ -28,8 +28,8 @@ if __name__ == "__main__":
     fedora_json_file = sys.argv[1]
     with open(fedora_json_file, 'r') as f:
         fedora_json = json.loads(f.read())
-        print("FEDORA:")
-        print(json.dumps(fedora_json, indent=4, sort_keys=True))
+        # print("FEDORA:")
+        # print(json.dumps(fedora_json, indent=4, sort_keys=True))
         hyrax_json = fedora2hyrax(fedora_json)
-        print("HYRAX:")
+        # print("HYRAX:")
         print(json.dumps(hyrax_json, indent=4, sort_keys=True))
