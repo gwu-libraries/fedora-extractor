@@ -3,6 +3,7 @@ import sys
 
 # Fedora to Hyrax mapping
 f2h = {
+    # Hyrax: Fedora
     'title': 'http://purl.org/dc/terms/title',
     'resource_type': 'http://purl.org/dc/terms/type',
     'creator': 'http://purl.org/dc/terms/creator',
@@ -15,17 +16,20 @@ f2h = {
 }
 
 
-def fedora2hyrax():
-    filename = sys.argv[1]
-    with open(filename, 'r') as f:
-        j = json.loads(f.read())
-        # print(json.dumps(j, indent=4, sort_keys=True))
-        j2 = {}
-        for fed, hyr in f2h.items():
-            if hyr in j:
-                j2[fed] = [k['@value'] for k in j[hyr]]
-        print(json.dumps(j2, indent=4, sort_keys=True))
+def fedora2hyrax(j):
+    j2 = {}
+    for fed, hyr in f2h.items():
+        if hyr in j:
+            j2[fed] = [k['@value'] for k in j[hyr]]
+    return(j2)
 
 
 if __name__ == "__main__":
-    fedora2hyrax()
+    fedora_json_file = sys.argv[1]
+    with open(fedora_json_file, 'r') as f:
+        fedora_json = json.loads(f.read())
+        print("FEDORA:")
+        print(json.dumps(fedora_json, indent=4, sort_keys=True))
+        hyrax_json = fedora2hyrax(fedora_json)
+        print("HYRAX:")
+        print(json.dumps(hyrax_json, indent=4, sort_keys=True))
