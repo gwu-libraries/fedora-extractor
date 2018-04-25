@@ -4,6 +4,7 @@ import os
 import requests
 import shutil
 import solr
+import urllib
 
 
 def extract_fedora_objects(ids, fedora_url, fedora_user, fedora_pwd):
@@ -29,7 +30,7 @@ def extract_fedora_objects(ids, fedora_url, fedora_user, fedora_pwd):
         fileurl = rurl + "/content"
         r = requests.get(fileurl, auth=(fedora_user, fedora_pwd), stream=True)
         if not config.debug_mode:
-            with open(filepath + "/" + filename, 'wb') as out_file:
+            with open(filepath + "/" + urllib.unquote(filename), 'wb') as out_file:
                 shutil.copyfileobj(r.raw, out_file)
         del r
 
