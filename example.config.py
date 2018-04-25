@@ -5,4 +5,9 @@ fedora_pwd = "fedoraPassword"
 
 data_root = "/path/to/my/data"
 
+# GW ScholarSpace ingest configuration
+ingest_path = "/opt/scholarspace/scholarspace-hyrax"
+ingest_command = "rake RAILS_ENV=production gwss:ingest_work"
+ingest_depositor = "openaccess@gwu.edu"
+
 debug_mode = False
