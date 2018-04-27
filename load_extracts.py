@@ -1,7 +1,8 @@
 import config
-import os
 from fedora2hyrax import fedora2hyrax
 import json
+import os
+import subprocess
 
 
 def load_extracts():
@@ -28,9 +29,11 @@ def load_extracts():
                                                     attachment_file),
                      '--depositor=%s' % config.ingest_depositor,
                      '--set-item-id=%s' % item_folder]
-        print(' '.join(command))
         if config.debug_mode is False:
-           output = subprocess.check_output(command, cwd=ingest_path)
+           print('Loading %s' % item_folder)
+           output = subprocess.check_output(command, cwd=config.ingest_path)
+        else:
+           print(' '.join(command))
 
 
 if __name__ == "__main__":
