@@ -12,7 +12,7 @@ f2h = {
     'date_created': 'http://purl.org/dc/terms/created',
     'gw_affiliation': 'http://scholarspace.library.gwu.edu/ns#gwaffiliation',
     'language': 'http://purl.org/dc/terms/language',
-    'rights': 'http://purl.org/dc/terms/rights'
+    'license': 'http://purl.org/dc/terms/rights'
 }
 
 
