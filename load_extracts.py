@@ -36,6 +36,9 @@ def load_extract(item_id):
     if config.retain_ids is True:
         command += ['--set-item-id=%s' % item_folder]
 
+    if config.load_as_private is True:
+        command += ['--private']
+
     if config.debug_mode is False:
         try:
             output = subprocess.check_output(command, cwd=config.ingest_path,
@@ -55,7 +58,7 @@ def load_extract(item_id):
 
 
 def load_all_extracts():
-    for item_folder_id in os.listdir(config.data_root)[:3]:
+    for item_folder_id in os.listdir(config.data_root):
         load_extract(item_folder_id)
 
 
