@@ -13,4 +13,5 @@ ingest_depositor = "openaccess@gwu.edu"
 
 # Flags
 retain_ids = False
+load_as_private = True
 debug_mode = False  # Behaves like a dry run, but DOES generate metadata-hyrax.json
