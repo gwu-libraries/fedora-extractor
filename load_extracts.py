@@ -41,15 +41,19 @@ def load_extract(item_id):
 
     if config.debug_mode is False:
         try:
-            output = subprocess.check_output(command, cwd=config.ingest_path,
-                                             stderr=subprocess.STDOUT)
+            processresult = subprocess.check_output(command, cwd=config.ingest_path,
+                                                    stderr=subprocess.STDOUT)
+            output = processresult.decode('utf-8')
+            output_pieces = output.split('\n')
+            new_id = output_pieces[-2]
+
             if not os.path.isfile(config.ingest_log):
                 ingestlog = open(config.ingest_log, "w")
                 ingestlog.write("original_id,gwssetd_id,upload_time\n")
                 ingestlog.close()
             with open(config.ingest_log, "a") as ingestlog:
                 now = datetime.datetime.utcnow()
-                ingestlog.write("%s,%s,%s\n" % (item_id, output.rstrip('\n'),
+                ingestlog.write("%s,%s,%s\n" % (item_id, new_id,
                                                 now.isoformat()))
         except CalledProcessError as e:
             print e.output
