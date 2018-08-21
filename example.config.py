@@ -4,6 +4,7 @@ fedora_user = "fedoraUser"
 fedora_pwd = "fedoraPassword"
 
 data_root = "/path/to/my/data"
+processed_root = "/path/to/processed/data"
 ingest_log = "/path/to/ingestlog.csv"
 
 # GW ScholarSpace ingest configuration

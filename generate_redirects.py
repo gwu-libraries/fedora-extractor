@@ -1,7 +1,8 @@
 import csv
 import sys
 
-new_server_id = "https://scholarspace-etds.library.gwu.edu"
+# new_server_id = "https://scholarspace-etds.library.gwu.edu"
+new_server_id = ""
 
 # Generate Apache redirects
 def generate_redirects(id_map_file):

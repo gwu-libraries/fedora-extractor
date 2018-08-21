@@ -3,6 +3,7 @@ import datetime
 from fedora2hyrax import fedora2hyrax
 import json
 import os
+import shutil
 import subprocess
 from subprocess import CalledProcessError
 
@@ -47,16 +48,24 @@ def load_extract(item_id):
             output_pieces = output.split('\n')
             new_id = output_pieces[-2]
 
+            # Create CSV log with header row, if it doesn't exist yet
             if not os.path.isfile(config.ingest_log):
                 ingestlog = open(config.ingest_log, "w")
                 ingestlog.write("original_id,gwssetd_id,upload_time\n")
                 ingestlog.close()
+
+            # write old, new IDs to CSV log
             with open(config.ingest_log, "a") as ingestlog:
                 now = datetime.datetime.utcnow()
                 ingestlog.write("%s,%s,%s\n" % (item_id, new_id,
                                                 now.isoformat()))
+
+            # move files
+            shutil.move(folder_path,
+                        os.path.join(config.processed_root, item_id))
+
         except CalledProcessError as e:
-            print e.output
+            print(e.output)
     else:
         print(' '.join(command) + '\n')
 
