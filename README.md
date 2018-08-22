@@ -15,3 +15,4 @@ Assumes Sufia 6 objects (pre-PCDM) stored in Fedora 4.6.0 repository, indexed in
 
 - Within your python environment (e.g. with virtualenv), `pip install -r requirements.txt`
 - `cp example.config.py config.py` , then configure the values in `config.py`
+- Currently, the `ids_from_solr` method is hard-coded to retrieve the first 2000 records.  If your repository contains more than 2000 records, either increase the value of `rows=` or use pagination to get the full set of results.
