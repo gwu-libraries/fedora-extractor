@@ -13,7 +13,7 @@ def extract_fedora_objects(ids, fedora_url, fedora_user, fedora_pwd):
         rurl = fedora_url + "/" + id_to_path(id)
         r = requests.get(rurl, auth=(fedora_user, fedora_pwd),
                          headers={"Accept":"application/ld+json"})
-        j = json.loads(r.content)
+        j = r.json()
  
         filepath = config.data_root + "/" + id
         os.mkdir(filepath)
@@ -24,15 +24,16 @@ def extract_fedora_objects(ids, fedora_url, fedora_user, fedora_pwd):
         furl = rurl + "/content/fcr:metadata"
         r = requests.get(furl, auth=(fedora_user, fedora_pwd),
                          headers={"Accept":"application/ld+json"})
-        j = json.loads(r.content)
+        j = r.json()
         filename = j[0]["http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#filename"][0]["@value"]
         print('Filename = %s' % filename)
         fileurl = rurl + "/content"
         r = requests.get(fileurl, auth=(fedora_user, fedora_pwd), stream=True)
         if not config.debug_mode:
-            with open(filepath + "/" + urllib.unquote(filename), 'wb') as out_file:
+            with open(filepath + "/" + urllib.parse.unquote(filename), 'wb') as out_file:
                 shutil.copyfileobj(r.raw, out_file)
         del r
+
 
 def ids_from_solr(solr_url):
     s = solr.SolrConnection(solr_url)
@@ -50,7 +51,7 @@ def id_to_path(id):
 
 if __name__ == "__main__":
     import config
-    
+
     print('Retrieving ids from solr index...')
     solr_ids = ids_from_solr(config.solr_url)
     print()
