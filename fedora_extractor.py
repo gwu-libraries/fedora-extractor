@@ -16,10 +16,12 @@ def extract_fedora_objects(ids, fedora_url, fedora_user, fedora_pwd):
         j = r.json()
  
         filepath = config.data_root + "/" + id
-        os.mkdir(filepath)
+        if not config.debug_mode:
+            os.mkdir(filepath)
 
-        with open(filepath + "/metadata.json", 'w') as metadata_file:
-            metadata_file.write(json.dumps(j[0], indent=4, sort_keys=True))
+        if not config.debug_mode:
+            with open(filepath + "/metadata.json", 'w') as metadata_file:
+                metadata_file.write(json.dumps(j[0], indent=4, sort_keys=True))
 
         furl = rurl + "/content/fcr:metadata"
         r = requests.get(furl, auth=(fedora_user, fedora_pwd),
