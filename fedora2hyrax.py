@@ -13,6 +13,8 @@ f2h = {
     'gw_affiliation': 'http://scholarspace.library.gwu.edu/ns#gwaffiliation',
     'language': 'http://purl.org/dc/terms/language',
     'license': 'http://purl.org/dc/terms/rights'
+    #    'related_url': 'http://www.w3.org/2000/01/rdf-schema#seeAlso',
+    #    'publisher': 'http://purl.org/dc/terms/publisher'
 }
 
 
