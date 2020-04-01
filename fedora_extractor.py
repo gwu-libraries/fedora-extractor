@@ -8,36 +8,51 @@ import urllib
 
 
 def extract_fedora_objects(ids, fedora_url, fedora_user, fedora_pwd):
-    for id in ids:
-        print("%s --> %s" % (id, id_to_path(id)))
-        rurl = fedora_url + "/" + id_to_path(id)
+    for work_id in ids:
+        print("%s --> %s" % (work_id, id_to_path(work_id)))
+        rurl = fedora_url + "/" + id_to_path(work_id)
         r = requests.get(rurl, auth=(fedora_user, fedora_pwd),
                          headers={"Accept": "application/ld+json"})
         j = r.json()
+
+        created_work_folder = False
         for member in j[0]['http://pcdm.org/models#hasMember']:
-            print(member['@id'])
             r_member = requests.get(member['@id'],
                                     auth=(fedora_user, fedora_pwd),
                                     headers={"Accept": "application/ld+json"})
             j = r_member.json()
             for f in j[0]['http://pcdm.org/models#hasFile']:
+                fileset_id = f['@id'].rsplit('/', 3)[-3]
+                file_id = f['@id'].rsplit('/', 1)[-1]
                 r_file = requests.get(f['@id']+'/fcr:metadata',
                                       auth=(fedora_user, fedora_pwd),
                                       headers={"Accept": "application/ld+json"})
                 j = r_file.json()
                 mType = j[0]['http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#hasMimeType']
                 if mType[0]['@value'] == 'application/pdf':
-                    print('found PDF')
+                    print('    found PDF')
                     fileurl = f['@id']
                     filename = j[0]["http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#filename"][0]["@value"]
                     r_download = requests.get(fileurl, auth=(fedora_user, fedora_pwd), stream=True)
-                    with open(filename, 'wb') as out_file:
-                        shutil.copyfileobj(r_download.raw, out_file)                        
+                    if not created_work_folder:
+                        workpath = config.data_root + "/" + work_id
+                        os.mkdir(workpath)
+                        created_work_folder = True
+                    filesetpath = workpath + '/' + fileset_id
+                    os.mkdir(filesetpath)
+                    filepath = filesetpath + '/' + file_id
+                    os.mkdir(filepath)
+
+                    with open(filepath + '/' + filename, 'wb') as out_file:
+                         shutil.copyfileobj(r_download.raw, out_file)                        
                 # else do nothing
+
 """
         filepath = config.data_root + "/" + id
         if not config.debug_mode:
             os.mkdir(filepath)
+        else
+            print("mkdir %s" % filepath)
 
         if not config.debug_mode:
             with open(filepath + "/metadata.json", 'w') as metadata_file:
@@ -78,8 +93,8 @@ def id_to_path(id):
 
 if __name__ == "__main__":
     print('Retrieving ids from solr index...')
-    # solr_ids = ids_from_solr(config.solr_url)
-    solr_ids = ['gb19f602j']
+    solr_ids = ids_from_solr(config.solr_url)
+    # solr_ids = ['gb19f602j']
     print()
     print('Extracting Fedora objects...')
     extract_fedora_objects(solr_ids,
